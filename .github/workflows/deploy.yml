@@ -1,0 +1,11 @@
+name: "Feature Store Deploy"
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print
+        run: echo "Print"
