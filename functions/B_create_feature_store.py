@@ -1,13 +1,26 @@
-import hsfs
-from config.constants import HOST_INSTANCE, PROJECT_NAME, API_KEY
+import hopsworks
 
 def connect_to_hopsworks():
-    conn = hsfs.connection(
-        host = HOST_INSTANCE,             # Port to reach your Hopsworks instance, defaults to 443
-        project=PROJECT_NAME,               # Name of your Hopsworks Feature Store project
-        api_key_value = API_KEY,             # The API key to authenticate with Hopsworks
-        hostname_verification=True          # Disable for self-signed certificates
+    project = hopsworks.login()
+
+    fs = project.get_feature_store()
+
+    return project, fs
+
+def create_feature_group(name, version, description, primary_key, online_enabled, fs, df, feature_descriptions):
+    fg = fs.get_or_create_feature_group(
+        name=name,
+        version=version,
+        description=description,
+        primary_key=primary_key,
+        online_enabled=online_enabled,
     )
 
-    fs = conn.get_feature_store() 
-    return fs
+    # Insert data into feature group
+    fg.insert(df)
+
+    for desc in feature_descriptions: 
+        fg.update_feature_description(desc["name"], desc["description"])
+
+def close_connection(fs):
+    fs.close()

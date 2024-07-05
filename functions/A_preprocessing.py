@@ -2,6 +2,9 @@ from matplotlib import pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
 import pandas as pd
+from sklearn.calibration import LabelEncoder
+from sklearn.discriminant_analysis import StandardScaler
+from sklearn.model_selection import train_test_split
 
 def read_dataset(path):
     df = pd.read_csv(path)
@@ -71,3 +74,40 @@ def delayed_flights(df):
     plt.axis('equal')
 
     plt.show()
+
+def clean_labels_encoder(df):
+    list_of_labels = ['CARRIER_NAME', 'DEPARTING_AIRPORT', 'PREVIOUS_AIRPORT', "PART_OF_DAY"]
+
+    le = LabelEncoder()
+    for label in list_of_labels:
+        df[label] = le.fit_transform(df[label])
+    return df
+
+def prepare_data_for_ML_model(df, is_NN=False):
+    
+    clean_labels_encoder(df)
+
+    X = df.drop(columns=['DEP_DEL15'])
+    y = df['DEP_DEL15']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Scale the data using a MinMaxScaler
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    # Ensure X_train and X_test are 2-dimensional arrays
+    # X_train = X_train_scaled.reshape(X_train_scaled.shape[0], -1)
+    # X_test = X_test_scaled.reshape(X_test_scaled.shape[0], -1)
+    X_train = X_train.reshape((X_train.shape[0], 1, X_train.shape[1] if is_NN else -1))
+    X_test = X_test.reshape((X_test.shape[0], 1, X_train.shape[1] if is_NN else -1))
+
+    if(is_NN):
+        X_train = X_train.reshape((X_train.shape[0], 1, X_train.shape[1]))
+        X_test = X_test.reshape((X_test.shape[0], 1, X_train.shape[1]))
+    else:
+        X_train = X_train.reshape((X_train.shape[0], -1))
+        X_test = X_test.reshape((X_test.shape[0], -1))
+
+    return X_train, X_test, y_train, y_test
