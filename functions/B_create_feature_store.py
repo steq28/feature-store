@@ -5,7 +5,7 @@ def connect_to_hopsworks():
 
     fs = project.get_feature_store()
 
-    return fs
+    return project, fs
 
 def create_feature_group(name, version, description, primary_key, online_enabled, fs, df, feature_descriptions):
     fg = fs.get_or_create_feature_group(
