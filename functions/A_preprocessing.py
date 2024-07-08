@@ -97,15 +97,9 @@ def prepare_data_for_ML_model(df, is_NN=False):
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
-    # Ensure X_train and X_test are 2-dimensional arrays
-    # X_train = X_train_scaled.reshape(X_train_scaled.shape[0], -1)
-    # X_test = X_test_scaled.reshape(X_test_scaled.shape[0], -1)
-    X_train = X_train.reshape((X_train.shape[0], 1, X_train.shape[1] if is_NN else -1))
-    X_test = X_test.reshape((X_test.shape[0], 1, X_train.shape[1] if is_NN else -1))
-
     if(is_NN):
         X_train = X_train.reshape((X_train.shape[0], 1, X_train.shape[1]))
-        X_test = X_test.reshape((X_test.shape[0], 1, X_train.shape[1]))
+        X_test = X_test.reshape((X_test.shape[0], 1, X_test.shape[1]))
     else:
         X_train = X_train.reshape((X_train.shape[0], -1))
         X_test = X_test.reshape((X_test.shape[0], -1))
