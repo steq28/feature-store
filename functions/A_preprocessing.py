@@ -75,6 +75,17 @@ def delayed_flights(df):
 
     plt.show()
 
+# def clean_labels_encoder(df):
+#     label_encoder = LabelEncoder()
+#     colsToEncode = ['CARRIER_NAME', 'DEPARTING_AIRPORT', 'PREVIOUS_AIRPORT', 'PART_OF_DAY']
+#     mappingDict = {}
+#     for col in colsToEncode:
+#         df[f'{col}'] = label_encoder.fit_transform(df[f'{col}'])
+#         mappingDict[f'{col}'] = dict(zip(label_encoder.classes_, label_encoder.transform(label_encoder.classes_)))
+
+#     # create dict with { label: value } (funziona solo quando viene eseguito dall'inizio se no diventa { value: value })
+#     return df, mappingDict
+
 def clean_labels_encoder(df):
     list_of_labels = ['CARRIER_NAME', 'DEPARTING_AIRPORT', 'PREVIOUS_AIRPORT', "PART_OF_DAY"]
 
@@ -83,19 +94,22 @@ def clean_labels_encoder(df):
         df[label] = le.fit_transform(df[label])
     return df
 
-def prepare_data_for_ML_model(df, is_NN=False):
-    
-    clean_labels_encoder(df)
+def scale_data(data):
+    # Scale the data using a MinMaxScaler
+    scaler = StandardScaler()
+    return scaler.fit_transform(data)
 
-    X = df.drop(columns=['DEP_DEL15'])
-    y = df['DEP_DEL15']
+def prepare_data_for_ML_model(df, is_NN=False, predCol="DEP_DEL15"):
+    
+    df = clean_labels_encoder(df)
+
+    X = df.drop(columns=[predCol])
+    y = df[predCol]
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Scale the data using a MinMaxScaler
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
+    X_train = scale_data(X_train)
+    X_test = scale_data(X_test)
 
     # Ensure X_train and X_test are 2-dimensional arrays
     # X_train = X_train_scaled.reshape(X_train_scaled.shape[0], -1)

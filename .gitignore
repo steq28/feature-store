@@ -157,6 +157,7 @@ cython_debug/
 # Our own data
 data/raw_dataset
 config/
+secrets/
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
