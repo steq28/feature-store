@@ -23,7 +23,7 @@ def define_NN_model(X_train):
 
 def train_NN_model(neural_model, X_train, X_test, Y_train, Y_test):
 
-    history = neural_model.fit(X_train, Y_train, epochs=3, batch_size=200, verbose=1, validation_data=(X_test, Y_test))
+    history = neural_model.fit(X_train, Y_train, epochs=10, batch_size=200, verbose=1, validation_data=(X_test, Y_test))
 
     _, train_acc = neural_model.evaluate(X_train, Y_train, verbose=0)
     _, test_acc = neural_model.evaluate(X_test, Y_test, verbose=0)
@@ -60,7 +60,7 @@ def train_MLP_classifier(mlp, X_train, X_test, Y_train, Y_test):
     train_accuracies = []
     test_accuracies = []
 
-    for i in range(10):
+    for i in range(20):
         mlp.partial_fit(X_train, Y_train, classes=np.unique(Y_train))
         
         # Calculate metrics on training set
@@ -75,7 +75,7 @@ def train_MLP_classifier(mlp, X_train, X_test, Y_train, Y_test):
         test_accuracy = accuracy_score(Y_test, mlp.predict(X_test))
         test_accuracies.append(test_accuracy)
 
-        print(f"Epoch {i+1}/{10} - Train Loss: {train_loss:.4f} - Train Acc: {train_accuracy:.4f} - Test Loss: {test_loss:.4f} - Test Acc: {test_accuracy:.4f}")
+        print(f"Epoch {i+1}/{20} - Train Loss: {train_loss:.4f} - Train Acc: {train_accuracy:.4f} - Test Loss: {test_loss:.4f} - Test Acc: {test_accuracy:.4f}")
 
     return train_losses, test_losses, train_accuracies, test_accuracies
 
