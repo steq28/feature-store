@@ -86,9 +86,7 @@ def delayed_flights(df):
 #     # create dict with { label: value } (funziona solo quando viene eseguito dall'inizio se no diventa { value: value })
 #     return df, mappingDict
 
-def clean_labels_encoder(df):
-    list_of_labels = ['CARRIER_NAME', 'DEPARTING_AIRPORT', 'PREVIOUS_AIRPORT', "PART_OF_DAY"]
-
+def clean_labels_encoder(df, list_of_labels):
     le = LabelEncoder()
     for label in list_of_labels:
         df[label] = le.fit_transform(df[label])
@@ -99,9 +97,11 @@ def scale_data(data):
     scaler = StandardScaler()
     return scaler.fit_transform(data)
 
-def prepare_data_for_ML_model(df, is_NN=False, predCol="DEP_DEL15"):
+def prepare_data_for_ML_model(df, is_NN=False, predCol="DEP_DEL15", 
+                              labelToClean=['CARRIER_NAME', 'DEPARTING_AIRPORT',
+                                             'PREVIOUS_AIRPORT', "PART_OF_DAY"]):
     
-    df = clean_labels_encoder(df)
+    df = clean_labels_encoder(df, labelToClean)
 
     X = df.drop(columns=[predCol])
     y = df[predCol]

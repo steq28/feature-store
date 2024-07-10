@@ -9,6 +9,15 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.svm import LinearSVC
 from functions import A_preprocessing as preprocessing
 import pandas as pd
+from functions import B_create_feature_store as feature_store
+
+def getDataset(fs):
+  flightGroup = feature_store.get_fature_group("flight_airport", fs)
+  weatherGroup = feature_store.get_fature_group("weather", fs)
+  flightFatures = flightGroup.select(["id", "part_of_day", "plane_age", "departing_airport", "previous_airport", "plane_age"])
+  weatherFeatures = weatherGroup.select(["id", "prcp", "snow", "snwd", "tmax", "awnd"])
+  df = pd.merge(flightFatures, weatherFeatures, how="left", on=["id"])
+  return df
 
 def svm(X_train, X_test, y_train, y_test):
   supportVec = LinearSVC(dual="auto", tol=1e-5, C=1)
