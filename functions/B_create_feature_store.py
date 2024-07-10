@@ -22,6 +22,8 @@ def create_feature_group(name, version, description, primary_key, online_enabled
     for desc in feature_descriptions: 
         fg.update_feature_description(desc["name"], desc["description"])
 
+    return fg
+
 def get_fature_group(name, fs, version=1):
     return fs.get_feature_group(
         name=name,
