@@ -9,15 +9,13 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.svm import LinearSVC
 from functions import A_preprocessing as preprocessing
 import pandas as pd
-from functions import B_create_feature_store as feature_store
 
-def svm(X_train, X_test, y_train, y_test):
-  supportVec = LinearSVC(dual="auto", tol=1e-5, C=1)
-  
+def svm(X_train, X_test, y_train, y_test):  
   # make task binary
   y_train = y_train > 0.0
   y_test = y_test > 0.0
 
+  supportVec = LinearSVC(dual="auto", tol=1e-5, C=1)
   supportVec.fit(X_train, y_train)
   y_pred = supportVec.predict(X_test)
 
