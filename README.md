@@ -1,5 +1,3 @@
-## README.md
-
 # Hopsworks Feature Store: Predictive Modeling of Flight Departure Delays
 
 This project utilizes Hopsworks for feature store management, aiming to predict flight departure delays using machine learning models. Hopsworks facilitates efficient feature engineering, storage, and retrieval, ensuring consistent and scalable data management throughout the machine learning workflow.
