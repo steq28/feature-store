@@ -76,7 +76,7 @@ The core of this project is the Hopsworks feature store, which provides a centra
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/steq28/feature-store.git
+   git clone https://github.com/steq28/hopsworks-feature-store-ml-predictions.git
    cd feature-store
    ```
 
